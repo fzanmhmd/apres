@@ -93,6 +93,8 @@ function cacheElements() {
     "loginNik",
     "loginPassword",
     "loginMessage",
+    "requestAccessBtn",
+    "accessRequestCard",
     "logoutBtn",
     "activeUserName",
     "homeGreetingTime",
@@ -217,6 +219,7 @@ async function bootApp() {
 
 function bindEvents() {
   el.loginForm?.addEventListener("submit", handleLogin);
+  el.requestAccessBtn?.addEventListener("click", toggleAccessRequest);
   el.logoutBtn?.addEventListener("click", handleLogout);
   el.refreshLocationBtn?.addEventListener("click", () => requestLocation(true));
   el.focusMyLocationBtn?.addEventListener("click", focusMyLocation);
@@ -308,6 +311,11 @@ function handleLogout() {
   clearAuthState();
   showAuth();
   showToast("Logout berhasil.");
+}
+
+function toggleAccessRequest() {
+  el.accessRequestCard?.classList.toggle("hidden");
+  showToast("Permintaan akses diverifikasi oleh HR/Admin.");
 }
 
 function showAuth() {
@@ -1432,10 +1440,12 @@ function downloadPayrollCsv() {
 }
 
 function renderAudit() {
-  if (el.auditCount) el.auditCount.textContent = `${appState.audit.length} event`;
+  const currentNik = appState.user?.nik || "guest";
+  const userAudit = appState.audit.filter((item) => item.user === currentNik);
+  if (el.auditCount) el.auditCount.textContent = `${userAudit.length} event`;
   if (!el.auditList) return;
-  const html = appState.audit.length
-    ? appState.audit
+  const html = userAudit.length
+    ? userAudit
         .slice(0, 30)
         .map(
           (item) => `
@@ -1477,8 +1487,9 @@ function addAudit(type, title, metadata = {}) {
 }
 
 function clearAudit() {
-  appState.audit = [];
-  saveJson(STORAGE_KEYS.audit, []);
+  const currentNik = appState.user?.nik || "guest";
+  appState.audit = appState.audit.filter((item) => item.user !== currentNik);
+  saveJson(STORAGE_KEYS.audit, appState.audit);
   renderAudit();
   showToast("Aktivitas akun dibersihkan.");
 }

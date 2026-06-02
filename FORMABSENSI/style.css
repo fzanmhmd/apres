@@ -319,6 +319,32 @@ img {
     font-size: 0.9rem;
 }
 
+.access-request {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+}
+
+.access-request-card {
+    width: 100%;
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #f8fafc;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.access-request-card strong {
+    color: var(--ink);
+}
+
+.access-request-card p {
+    margin: 0;
+}
+
 .login-device-note {
     display: flex;
     align-items: center;
