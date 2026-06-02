@@ -1,79 +1,501 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="jpg" href="mega.jpg">
-    <title>Absensi PT.MEGA PRIMATAMA</title>
-    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="icon" type="image/svg+xml" href="apres-logo.svg">
+    <title>APRES - PT.MARKOJAN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css?v=20260526-presensi-flow">
 </head>
 <body>
-    <header>
-        <img src="mega.jpg" alt="logopt">
-        <h1>PT.MEGA PRIMATAMA</h1>
-    </header>
-    <main>
-        <form action="kirimform" id="formabsen" method="post">
-            <div class="forminput">
-                <input type="text" name="Nama" placeholder=" ">
-                <span>Nama</span>
+    <div class="app-frame">
+        <section class="auth-screen" id="authScreen">
+            <div class="auth-brand">
+                <div class="apres-mark" role="img" aria-label="Logo APRES">AP</div>
+                <div>
+                    <span>PT.MARKOJAN</span>
+                    <h1>APRES</h1>
+                    <p>Aplikasi Presensi</p>
+                </div>
             </div>
-            <div class="forminput">
-                <input type="tel" name="noabsen" placeholder=" ">
-                <span>No Absen</span>
-            </div>
-            <div class="forminput">
-                <input type="text" id="tanggal" name="date" placeholder=" ">
-                <span>Tanggal Absen</span>
-            </div>
-            <div class="forminput" >
-                <select id="shift">
-                    <option value="">Shift :</option>
-                    <option>PAGI</option>
-                    <option>SIANG</option>
-                    <option>MALAM</option>
-                </select>
-            </div>
-            <div class="forminput" >
-                <label for="masuk">Masuk :</label>
-                <input type="time" id="masuk" name="masuk">
-                <label for="pulang">Pulang :</label>
-                <input type="time" id="pulang" name="pulang">
-            </div>
-            <div class="forminput">
-                <label for="upload">Upload Foto : </label>
-                <input type="file" id="myfile" name="upload">
-                <p><i>*menggunakan timestamp</i></p>
-            </div>
-            <button type="submit" id="kirimformabsen">Kirim</button>
-        </form>  
-    </main>
 
-    <footer>
-        <hr>
-        <div class="social">
-            <a href="https://www.instagram.com/fzannmhd" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://github.com/fzanmhmd" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="https://www.linkedin.com/in/muhammad-fauzan-9b80103b2/" target="_blank"><i class="fab fa-linkedin"></i></a>
-        </div>
-        <p>&copy;2026 MFauzan. All rights reserved.</p>   
-    </footer>
+            <form class="auth-panel" id="loginForm" autocomplete="on">
+                <div class="section-title">
+                    <p>Login</p>
+                    <h2>Masuk akun</h2>
+                </div>
 
+                <label class="field">
+                    <span>No Absen</span>
+                    <input type="text" id="loginNik" name="nik" placeholder="MP-001" required>
+                </label>
 
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="script.js"></script>
-</script>
+                <label class="field">
+                    <span>Password</span>
+                    <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+                </label>
 
-    <div id="alert-overlay" style="display:none;">
-    <div id="alert-box">
-    <div id="alert-icon">!</div>
-    <p id="alert-message">Tanggal harus diisi!</p>
-    <button onclick="tutupAlert()">OK</button>
-  </div>
-</div>
+                <button class="primary-btn" type="submit">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Login
+                </button>
+                <p class="form-note" id="loginMessage"></p>
+            </form>
+        </section>
+
+        <section class="app-shell hidden" id="appShell" aria-live="polite">
+            <header class="topbar">
+                <div class="brand-row">
+                    <div class="apres-mark small" role="img" aria-label="Logo APRES">AP</div>
+                    <div>
+                        <span>APRES - PT.MARKOJAN</span>
+                        <strong id="activeUserName">Karyawan</strong>
+                    </div>
+                </div>
+                <button class="icon-btn" id="logoutBtn" type="button" aria-label="Logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+            </header>
+
+            <main class="content">
+                <section class="view active" data-view="home">
+                    <article class="home-hero">
+                        <div>
+                            <p id="homeEmployeeId">No Absen: -</p>
+                            <h2><span id="homeGreetingTime">Selamat pagi</span>, <span id="homeGreetingName">Karyawan</span></h2>
+                        </div>
+                        <div class="clock-card">
+                            <span>Waktu sekarang</span>
+                            <strong id="realtimeClock">00:00:00</strong>
+                            <span id="realtimeDate">Hari ini</span>
+                        </div>
+                    </article>
+
+                    <div class="panel-grid">
+                        <article class="panel attendance-action-card">
+                            <div class="panel-header">
+                                <h3 id="homeAttendanceTitle">Anda belum presensi</h3>
+                                <span class="pill" id="attendanceStatus">Belum presensi</span>
+                            </div>
+                            <p id="homeAttendanceDesc">Silakan lakukan presensi masuk saat sudah berada di area kantor.</p>
+                            <div class="home-action-row">
+                                <button class="primary-btn" id="homePrimaryAttendanceBtn" type="button">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                    Presensi masuk
+                                </button>
+                                <button class="secondary-btn hidden" id="homeSecondaryAttendanceBtn" type="button">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    Presensi keluar
+                                </button>
+                            </div>
+                            <div class="today-summary" id="todaySummary"></div>
+                            <div class="rest-message hidden" id="restMessage">
+                                <i class="fa-solid fa-mug-hot"></i>
+                                <span>Selamat istirahat. Sampai jumpa di shift berikutnya.</span>
+                            </div>
+                        </article>
+
+                        <article class="panel schedule-notice-card notification-card">
+                            <div class="panel-header">
+                                <h3>Notifikasi jadwal</h3>
+                                <button class="text-btn" type="button" data-jump="histori">Atur</button>
+                            </div>
+                            <div class="schedule-notice" id="homeScheduleNotice">Jadwal belum diatur.</div>
+                        </article>
+                    </div>
+
+                    <article class="panel news-panel">
+                        <div class="panel-header">
+                            <h3>Pemberitahuan kantor</h3>
+                            <span class="pill soft">Info</span>
+                        </div>
+                        <div class="news-grid brochure-grid" id="officeNewsList"></div>
+                    </article>
+                </section>
+
+                <section class="view" data-view="absen">
+                    <div class="page-heading">
+                        <div>
+                            <p>Check in / check out otomatis</p>
+                            <h2>Presensi</h2>
+                        </div>
+                        <button class="secondary-btn" id="refreshLocationBtn" type="button">
+                            <i class="fa-solid fa-location-dot"></i>
+                            GPS
+                        </button>
+                    </div>
+
+                    <div class="attendance-simple-layout">
+                        <article class="panel attendance-form-card">
+                            <div class="panel-header">
+                                <h3>Presensi hari ini</h3>
+                                <span class="pill" id="geoFenceBadge">GPS</span>
+                            </div>
+
+                            <div class="auto-check-card">
+                                <div>
+                                    <i class="fa-solid fa-face-smile"></i>
+                                    <span>Face liveness otomatis</span>
+                                    <strong id="livenessStatus">Menunggu kamera</strong>
+                                </div>
+                                <div>
+                                    <i class="fa-solid fa-location-crosshairs"></i>
+                                    <span>GPS geofence</span>
+                                    <strong id="geoStatus">Menunggu lokasi</strong>
+                                </div>
+                            </div>
+
+                            <form class="attendance-form" id="attendanceForm">
+                            <div class="segmented" role="group" aria-label="Jenis presensi">
+                                <label>
+                                    <input type="radio" name="attendanceType" value="Masuk" checked>
+                                    <span><i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="attendanceType" value="Keluar">
+                                    <span><i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar</span>
+                                </label>
+                            </div>
+
+                            <div class="today-mini-summary" id="attendanceTodaySummary"></div>
+
+                            <label class="field">
+                                <span>Shift</span>
+                                <select id="shiftSelect" required>
+                                    <option value="">Pilih shift</option>
+                                    <option>Pagi</option>
+                                    <option>Siang</option>
+                                    <option>Malam</option>
+                                </select>
+                            </label>
+
+                            <button class="primary-btn" type="submit">
+                                <i class="fa-solid fa-fingerprint"></i>
+                                Simpan presensi
+                            </button>
+                            </form>
+                        </article>
+
+                        <article class="panel camera-panel compact-camera-panel">
+                            <div class="panel-header">
+                                <h3>Kamera</h3>
+                                <span class="pill soft" id="faceStatus">Otomatis</span>
+                            </div>
+                            <div class="camera-box compact-camera-box">
+                                <video id="cameraPreview" playsinline muted></video>
+                                <canvas id="captureCanvas" class="hidden"></canvas>
+                                <div class="camera-placeholder" id="cameraPlaceholder">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span>Kamera akan aktif saat membuka presensi</span>
+                                </div>
+                            </div>
+                            <div class="mini-state">
+                                <span id="challengeText">Validasi otomatis</span>
+                                <strong id="faceScore">0%</strong>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="map-layout attendance-map-layout">
+                        <article class="panel map-panel compact-map-panel">
+                            <div id="mapCanvas" class="map-canvas"></div>
+                            <div class="map-fallback" id="mapFallback">
+                                <div class="mock-road road-one"></div>
+                                <div class="mock-road road-two"></div>
+                                <div class="mock-road road-three"></div>
+                                <div class="geofence-ring">
+                                    <span>Kantor</span>
+                                </div>
+                                <div class="map-pin office-pin">
+                                    <i class="fa-solid fa-building"></i>
+                                </div>
+                                <div class="map-pin user-pin hidden" id="fallbackUserPin">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div class="map-chip" id="fallbackMapLabel">Area kantor</div>
+                            </div>
+                        </article>
+                        <article class="panel">
+                            <div class="panel-header">
+                                <h3>Map kantor</h3>
+                                <span class="pill soft" id="insideOfficeBadge">Menunggu GPS</span>
+                            </div>
+                            <div class="button-row stacked-buttons">
+                                <button class="secondary-btn" id="focusMyLocationBtn" type="button">
+                                    <i class="fa-solid fa-location-crosshairs"></i>
+                                    Lokasi saya
+                                </button>
+                                <button class="secondary-btn" id="focusOfficeBtn" type="button">
+                                    <i class="fa-solid fa-building"></i>
+                                    Kantor
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="view" data-view="histori">
+                    <div class="page-heading">
+                        <div>
+                            <p>Histori dan jadwal kerja</p>
+                            <h2>Jadwal</h2>
+                        </div>
+                        <button class="secondary-btn" id="downloadHistoryBtn" type="button">
+                            <i class="fa-solid fa-download"></i>
+                            CSV
+                        </button>
+                    </div>
+
+                    <div class="schedule-toolbar">
+                        <label class="field compact-field">
+                            <span>Bulan dan tahun</span>
+                            <input type="month" id="historyMonth">
+                        </label>
+                        <div class="schedule-tabs" role="tablist" aria-label="Menu jadwal">
+                            <button class="active" type="button" data-schedule-tab="dashboard">Dashboard</button>
+                            <button type="button" data-schedule-tab="history">Histori jadwal</button>
+                            <button type="button" data-schedule-tab="planner">Jadwal anda</button>
+                        </div>
+                    </div>
+
+                    <section class="schedule-tab-panel active" data-schedule-panel="dashboard">
+                        <div class="schedule-dashboard" id="scheduleDashboard"></div>
+                    </section>
+
+                    <section class="schedule-tab-panel" data-schedule-panel="history">
+                        <article class="panel table-panel">
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Jadwal</th>
+                                        <th>Masuk</th>
+                                        <th>Keluar</th>
+                                        <th>Telat</th>
+                                        <th>Durasi</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTable"></tbody>
+                            </table>
+                        </div>
+                    </article>
+                    </section>
+
+                    <section class="schedule-tab-panel" data-schedule-panel="planner">
+                        <article class="panel monthly-schedule-panel">
+                            <div class="panel-header">
+                                <h3>Jadwal anda</h3>
+                                <span class="pill soft">Dummy editable</span>
+                            </div>
+                            <div class="planner-controls">
+                                <label class="field compact-field">
+                                    <span>Template shift</span>
+                                    <select id="scheduleDefaultShift">
+                                        <option value="Pagi">Pagi - 08:00</option>
+                                        <option value="Siang">Siang - 13:30</option>
+                                        <option value="Malam">Malam - 21:00</option>
+                                        <option value="Libur">Libur</option>
+                                    </select>
+                                </label>
+                                <button class="secondary-btn" id="generateMonthlyScheduleBtn" type="button">
+                                    <i class="fa-solid fa-calendar-plus"></i>
+                                    Buat jadwal bulan
+                                </button>
+                            </div>
+                            <div class="monthly-schedule-grid" id="monthlyScheduleGrid"></div>
+                        </article>
+                    </section>
+                </section>
+
+                <section class="view" data-view="payroll">
+                    <div class="page-heading">
+                        <div>
+                            <p>Laporan gaji bulanan</p>
+                            <h2>Payroll</h2>
+                        </div>
+                        <label class="field compact-field">
+                            <span>Bulan payroll</span>
+                            <input type="month" id="payrollMonth">
+                        </label>
+                    </div>
+
+                    <div class="payroll-grid">
+                        <article class="panel payroll-summary-card">
+                            <span>Total diterima bulan ini</span>
+                            <strong id="payrollEstimate">Rp0</strong>
+                            <p id="payrollNote">Mengikuti presensi lengkap, lembur, uang makan, dan potongan telat.</p>
+                            <div class="payroll-action-row">
+                                <button class="secondary-btn" id="overtimeReportBtn" type="button">
+                                    <i class="fa-solid fa-business-time"></i>
+                                    Laporan lembur
+                                </button>
+                                <button class="secondary-btn" id="downloadPayrollBtn" type="button">
+                                    <i class="fa-solid fa-file-arrow-down"></i>
+                                    Unduh
+                                </button>
+                            </div>
+                        </article>
+                        <article class="panel payroll-chart-card">
+                            <div class="panel-header">
+                                <h3>Grafik payroll</h3>
+                                <span class="pill soft">Bulanan</span>
+                            </div>
+                            <div class="payroll-graph" id="payrollBars"></div>
+                        </article>
+                    </div>
+
+                    <div class="payroll-stat-grid">
+                        <article class="payroll-stat">
+                            <span>Hari lengkap</span>
+                            <strong id="payrollWorkDays">0</strong>
+                        </article>
+                        <article class="payroll-stat">
+                            <span>Jam lembur</span>
+                            <strong id="payrollOvertimeHours">0</strong>
+                        </article>
+                        <article class="payroll-stat">
+                            <span>Uang makan</span>
+                            <strong id="payrollMealAllowance">Rp0</strong>
+                        </article>
+                    </div>
+
+                    <article class="panel table-panel payroll-table-panel">
+                        <div class="panel-header padded-header">
+                            <h3>Rincian laporan gaji</h3>
+                            <span class="pill soft" id="payrollMonthLabel">Bulan ini</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Komponen</th>
+                                        <th>Jumlah</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payrollTable"></tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="view" data-view="profil">
+                    <div class="page-heading">
+                        <div>
+                            <p>Akun</p>
+                            <h2>Profil</h2>
+                        </div>
+                        <span class="pill soft" id="profileSavedBadge">Aktif</span>
+                    </div>
+
+                    <div class="profile-layout">
+                        <form class="panel profile-form" id="profileForm">
+                            <div class="panel-header">
+                                <h3>Keamanan akun</h3>
+                                <span class="pill soft" id="profileRoleBadge">Employee</span>
+                            </div>
+                            <div class="locked-field">
+                                <span>No Absen</span>
+                                <strong id="profileNikView">-</strong>
+                            </div>
+                            <label class="field">
+                                <span>Nama karyawan</span>
+                                <input type="text" id="profileName" readonly>
+                            </label>
+                            <div class="double-field">
+                                <label class="field">
+                                    <span>Password saat ini</span>
+                                    <input type="password" id="currentPassword" placeholder="Masukkan password lama">
+                                </label>
+                                <label class="field">
+                                    <span>Password baru</span>
+                                    <input type="password" id="newPassword" placeholder="Minimal 6 karakter">
+                                </label>
+                            </div>
+                            <label class="field">
+                                <span>Konfirmasi password baru</span>
+                                <input type="password" id="confirmPassword" placeholder="Ulangi password baru">
+                            </label>
+                            <button class="primary-btn" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Simpan password
+                            </button>
+                        </form>
+                    </div>
+
+                    <form class="panel hidden" id="geoForm">
+                        <div class="panel-header">
+                            <h3>Geofence admin</h3>
+                            <span class="pill soft">Office</span>
+                        </div>
+                        <div class="double-field">
+                            <label class="field">
+                                <span>Latitude</span>
+                                <input type="number" id="officeLatInput" step="0.000001" required>
+                            </label>
+                            <label class="field">
+                                <span>Longitude</span>
+                                <input type="number" id="officeLngInput" step="0.000001" required>
+                            </label>
+                        </div>
+                        <label class="field">
+                            <span>Radius meter</span>
+                            <input type="number" id="officeRadiusInput" min="20" step="10" required>
+                        </label>
+                        <button class="secondary-btn full-btn" type="submit">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Update geofence
+                        </button>
+                    </form>
+
+                    <article class="panel audit-panel">
+                        <div class="panel-header">
+                            <h3>Aktivitas akun</h3>
+                            <button class="text-btn" id="clearAuditBtn" type="button">Bersihkan</button>
+                        </div>
+                        <div class="audit-list" id="auditList"></div>
+                    </article>
+                </section>
+            </main>
+
+            <nav class="bottom-nav" aria-label="Navigasi aplikasi">
+                <button class="active" type="button" data-target="home" aria-label="Dashboard">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+                <button type="button" data-target="absen" aria-label="Presensi">
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <span>Presensi</span>
+                </button>
+                <button type="button" data-target="histori" aria-label="Jadwal">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Jadwal</span>
+                </button>
+                <button type="button" data-target="payroll" aria-label="Payroll">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Payroll</span>
+                </button>
+                <button type="button" data-target="profil" aria-label="Profil">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Profil</span>
+                </button>
+            </nav>
+        </section>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js?v=20260526-presensi-flow"></script>
 </body>
 </html>

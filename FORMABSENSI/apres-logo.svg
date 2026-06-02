@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">APRES Logo</title>
+  <desc id="desc">Logo sederhana aplikasi presensi PT.MARKOJAN</desc>
+  <defs>
+    <linearGradient id="mark" x1="18" y1="16" x2="110" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E7A5F"/>
+      <stop offset="1" stop-color="#0EA5A3"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="32" fill="#F7FBF8"/>
+  <rect x="14" y="14" width="100" height="100" rx="28" fill="url(#mark)"/>
+  <path d="M39 78.5 55.5 36h17L89 78.5H75.5l-2.8-8H55.8l-2.8 8H39Zm20.4-18.8h9.8L64.4 45.4h-.3l-4.7 14.3Z" fill="white"/>
+  <path d="M42 91h44" stroke="#E8FFF8" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="94" cy="34" r="10" fill="#F4C95D"/>
+</svg>

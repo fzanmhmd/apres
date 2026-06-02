@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title">
+  <title id="title">Brosur Selamat Hari Natal</title>
+  <rect width="640" height="360" rx="28" fill="#f7fbf8"/>
+  <rect x="24" y="24" width="592" height="312" rx="26" fill="#156b50"/>
+  <circle cx="520" cy="76" r="46" fill="#f4c95d"/>
+  <path d="M124 250h140l-70-164-70 164Z" fill="#e8fff8"/>
+  <path d="M154 218h80l-40-96-40 96Z" fill="#1e7a5f"/>
+  <rect x="179" y="250" width="30" height="44" rx="6" fill="#8a4f23"/>
+  <text x="330" y="134" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Selamat Hari Natal</text>
+  <text x="330" y="182" fill="#dff9ef" font-family="Arial, sans-serif" font-size="20">Damai dan sukacita untuk seluruh keluarga besar</text>
+  <text x="330" y="216" fill="#f4c95d" font-family="Arial, sans-serif" font-size="28" font-weight="700">PT.MARKOJAN</text>
+</svg>

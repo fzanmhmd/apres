@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title">
+  <title id="title">Pengumuman Libur Nasional</title>
+  <rect width="640" height="360" rx="28" fill="#f6f8f7"/>
+  <rect x="24" y="24" width="592" height="312" rx="26" fill="#1f2937"/>
+  <rect x="80" y="76" width="186" height="208" rx="20" fill="#ffffff"/>
+  <rect x="80" y="76" width="186" height="58" rx="20" fill="#1e7a5f"/>
+  <circle cx="128" cy="160" r="18" fill="#f4c95d"/>
+  <circle cx="174" cy="160" r="18" fill="#0ea5a3"/>
+  <circle cx="220" cy="160" r="18" fill="#2c6bed"/>
+  <rect x="112" y="206" width="122" height="14" rx="7" fill="#dce8e3"/>
+  <rect x="112" y="236" width="92" height="14" rx="7" fill="#dce8e3"/>
+  <text x="320" y="124" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Surat Edaran Kantor</text>
+  <text x="320" y="172" fill="#dbeafe" font-family="Arial, sans-serif" font-size="20">Info libur nasional dan jadwal operasional</text>
+  <text x="320" y="218" fill="#f4c95d" font-family="Arial, sans-serif" font-size="28" font-weight="700">Pantau APRES setiap minggu</text>
+</svg>
