@@ -1,6 +1,26 @@
-# Backend APRES PT.MARKOJAN
+# APRES PT.MARKOJAN
 
-Backend ini memakai PHP PDO dan MySQL supaya bisa dipasang di XAMPP, Laragon, atau hosting PHP biasa.
+APRES adalah aplikasi presensi karyawan berbasis frontend statis, PHP PDO, dan MySQL. Struktur repo sudah dipisahkan supaya mudah dipasang di XAMPP, Laragon, atau hosting PHP biasa.
+
+## Struktur folder
+
+```text
+/
+|-- index.html
+|-- assets/
+|   |-- css/style.css
+|   |-- js/script.js
+|   `-- img/
+|-- api/
+|-- database/
+|-- tools/
+`-- static-server.cjs
+```
+
+- `assets/` menyimpan CSS, JavaScript, logo, dan gambar brosur.
+- `api/` menyimpan endpoint PHP.
+- `database/` menyimpan schema dan file upgrade SQL.
+- `tools/` menyimpan script CLI untuk administrasi data awal.
 
 ## Setup singkat
 
@@ -18,7 +38,7 @@ php -r "echo password_hash('password-anda', PASSWORD_DEFAULT), PHP_EOL;"
 ```
 
 4. Insert user awal ke tabel `users` dengan hash tersebut.
-5. Jalankan folder `FORMABSENSI` dari server PHP, bukan langsung dari `file://`.
+5. Jalankan root project dari server PHP, bukan langsung dari `file://`.
 
 Endpoint tersedia:
 
@@ -51,7 +71,7 @@ Langkah ringkas:
 
 1. Start Apache dan MySQL di Laragon.
 2. Import `database/schema.sql` ke MySQL.
-3. Cek koneksi dari browser: `http://localhost/FORMABSENSI/api/db_check.php`.
+3. Cek koneksi dari browser: `http://localhost/apres/api/db_check.php`.
 4. Buat admin pertama dari terminal Laragon:
 
 ```bash

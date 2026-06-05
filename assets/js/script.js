@@ -27,19 +27,19 @@ const DEFAULT_SCHEDULE = {
 
 const OFFICE_NEWS = [
   {
-    image: "assets/brosur-natal.svg",
+    image: "assets/img/brosur-natal.svg",
     label: "Brosur",
     title: "Selamat Hari Natal",
     body: "Damai dan sukacita untuk seluruh keluarga besar PT.MARKOJAN.",
   },
   {
-    image: "assets/brosur-idulfitri.svg",
+    image: "assets/img/brosur-idulfitri.svg",
     label: "Brosur",
     title: "Selamat Idul Fitri",
     body: "Mohon maaf lahir dan batin. Jadwal operasional mengikuti edaran kantor.",
   },
   {
-    image: "assets/pengumuman-libur.svg",
+    image: "assets/img/pengumuman-libur.svg",
     label: "Surat keterangan",
     title: "Info Libur Nasional",
     body: "Periksa surat edaran kantor untuk perubahan jadwal dan hari libur.",
@@ -1515,7 +1515,7 @@ async function apiRequest(path, options = {}) {
     return {
       ok: false,
       status: 0,
-      message: "Server API tidak terhubung. Jalankan lewat Laragon: http://localhost/FORMABSENSI/",
+      message: "Server API tidak terhubung. Jalankan lewat Laragon: http://localhost/apres/",
     };
   }
 }
